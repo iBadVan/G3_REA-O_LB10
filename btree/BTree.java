@@ -1,5 +1,14 @@
 package btree;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import Exceptions.ItemNoFound;
+
 public class BTree<E extends Comparable<E>> {
     private BNode<E> root;
     private int orden;
@@ -345,5 +354,69 @@ public class BTree<E extends Comparable<E>> {
         child.count += sibling.count + 1;
         node.count--;
     }
+
+    public static BTree<Integer> building_Btree(String filename) throws IOException, ItemNoFound {
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+        String line;
+
+        int orden = Integer.parseInt(br.readLine().trim());
+        BTree<Integer> btree = new BTree<>(orden);
+
+        Map<Integer, BNode<Integer>> nodeMap = new HashMap<>();
+        Map<Integer, Integer> nodeLevel = new HashMap<>();
+        Map<Integer, List<Integer>> nodeChildren = new HashMap<>();
+
+        while ((line = br.readLine()) != null) {
+            String[] parts = line.split(",");
+            int nivel = Integer.parseInt(parts[0].trim());
+            int id = Integer.parseInt(parts[1].trim());
+
+            BNode<Integer> node = new BNode<>(orden);
+            node.count = parts.length - 2;
+
+            for (int i = 2; i < parts.length; i++) {
+                node.keys.set(i - 2, Integer.parseInt(parts[i].trim()));
+            }
+
+            nodeMap.put(id, node);
+            nodeLevel.put(id, nivel);
+        }
+        br.close();
+
+        for (Map.Entry<Integer, BNode<Integer>> entry : nodeMap.entrySet()) {
+            int parentLevel = nodeLevel.get(entry.getKey());
+            BNode<Integer> parent = entry.getValue();
+
+            for (Map.Entry<Integer, BNode<Integer>> childEntry : nodeMap.entrySet()) {
+                int childLevel = nodeLevel.get(childEntry.getKey());
+
+                if (childLevel == parentLevel + 1) {
+                    BNode<Integer> child = childEntry.getValue();
+                    // insert child if it fits
+                    for (int i = 0; i <= parent.count; i++) {
+                        if (parent.childs.get(i) == null) {
+                            parent.childs.set(i, child);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Buscar la raíz (nivel 0)
+        for (Map.Entry<Integer, Integer> entry : nodeLevel.entrySet()) {
+            if (entry.getValue() == 0) {
+                btree.root = nodeMap.get(entry.getKey());
+                break;
+            }
+        }
+
+        if (!btree.validateBTree()) {
+            throw new ItemNoFound("El árbol no cumple con las propiedades de un árbol B.");
+        }
+
+        return btree;
+    }
+
 
 }
