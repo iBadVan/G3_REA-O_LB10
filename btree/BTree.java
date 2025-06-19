@@ -186,5 +186,17 @@ public class BTree<E extends Comparable<E>> {
         }
     }
 
+    public void remove(E cl) {
+        if (root != null) {
+            remove(root, cl);
+            if (root.count == 0) {
+                if (!root.nodeEmpty() && root.childs.get(0) != null) {
+                    root = root.childs.get(0);
+                } else {
+                    root = null;
+                }
+            }
+        }
+    }
 
 }
