@@ -103,5 +103,16 @@ public class BTree<E extends Comparable<E>> {
         return mediana;
     }
 
+    public void printTree() {
+        printTree(this.root, 0);
+    }
+
+    private void printTree(BNode<E> node, int level) {
+        if (node == null) return;
+        System.out.println("Nivel " + level + ": " + node);
+        for (int i = 0; i <= node.count; i++) {
+            printTree(node.childs.get(i), level + 1);
+        }
+    }
 
 }
