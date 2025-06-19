@@ -167,4 +167,7 @@ public class BTree<E extends Comparable<E>> {
         return sb.toString();
     }
 
+    public boolean search(E cl) {
+        return search(this.root, cl);
+    }
 }
