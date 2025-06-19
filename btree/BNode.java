@@ -18,5 +18,9 @@ public class BNode<E extends Comparable<E>> {
         this.childs.add(null);
     }
 
+    public boolean nodeFull(int n) {
+        return count == n;
+    }
+
 
 }
