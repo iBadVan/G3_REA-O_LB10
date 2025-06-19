@@ -267,5 +267,19 @@ public class BTree<E extends Comparable<E>> {
         return node.keys.get(0);
     }
 
+    private void fill(BNode<E> node, int idx) {
+        if (idx != 0 && node.childs.get(idx - 1).count >= (orden / 2)) {
+            borrowFromPrev(node, idx);
+        } else if (idx != node.count && node.childs.get(idx + 1).count >= (orden / 2)) {
+            borrowFromNext(node, idx);
+        } else {
+            if (idx != node.count) {
+                merge(node, idx);
+            } else {
+                merge(node, idx - 1);
+            }
+        }
+    }
+
 
 }
