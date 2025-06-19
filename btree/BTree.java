@@ -280,6 +280,26 @@ public class BTree<E extends Comparable<E>> {
             }
         }
     }
+    
+    private void borrowFromPrev(BNode<E> node, int idx) {
+        BNode<E> child = node.childs.get(idx);
+        BNode<E> sibling = node.childs.get(idx - 1);
 
+        for (int i = child.count - 1; i >= 0; i--)
+            child.keys.set(i + 1, child.keys.get(i));
+        if (!child.nodeEmpty()) {
+            for (int i = child.count; i >= 0; i--)
+                child.childs.set(i + 1, child.childs.get(i));
+        }
+
+        child.keys.set(0, node.keys.get(idx - 1));
+        if (!sibling.nodeEmpty())
+            child.childs.set(0, sibling.childs.get(sibling.count));
+
+        node.keys.set(idx - 1, sibling.keys.get(sibling.count - 1));
+
+        child.count++;
+        sibling.count--;
+    }
 
 }
