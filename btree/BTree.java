@@ -228,4 +228,13 @@ public class BTree<E extends Comparable<E>> {
         }
     }
 
+    private void removeFromLeaf(BNode<E> node, int idx) {
+        for (int i = idx + 1; i < node.count; i++) {
+            node.keys.set(i - 1, node.keys.get(i));
+        }
+        node.keys.set(node.count - 1, null);
+        node.count--;
+    }
+
+
 }
