@@ -280,7 +280,7 @@ public class BTree<E extends Comparable<E>> {
             }
         }
     }
-    
+
     private void borrowFromPrev(BNode<E> node, int idx) {
         BNode<E> child = node.childs.get(idx);
         BNode<E> sibling = node.childs.get(idx - 1);
@@ -297,6 +297,27 @@ public class BTree<E extends Comparable<E>> {
             child.childs.set(0, sibling.childs.get(sibling.count));
 
         node.keys.set(idx - 1, sibling.keys.get(sibling.count - 1));
+
+        child.count++;
+        sibling.count--;
+    }
+
+    private void borrowFromNext(BNode<E> node, int idx) {
+        BNode<E> child = node.childs.get(idx);
+        BNode<E> sibling = node.childs.get(idx + 1);
+
+        child.keys.set(child.count, node.keys.get(idx));
+        if (!sibling.nodeEmpty())
+            child.childs.set(child.count + 1, sibling.childs.get(0));
+
+        node.keys.set(idx, sibling.keys.get(0));
+
+        for (int i = 1; i < sibling.count; i++)
+            sibling.keys.set(i - 1, sibling.keys.get(i));
+        if (!sibling.nodeEmpty()) {
+            for (int i = 1; i <= sibling.count; i++)
+                sibling.childs.set(i - 1, sibling.childs.get(i));
+        }
 
         child.count++;
         sibling.count--;
