@@ -199,4 +199,33 @@ public class BTree<E extends Comparable<E>> {
         }
     }
 
+    private void remove(BNode<E> node, E key) {
+        BNode<E>.SearchResult result = node.searchNode(key);
+        int pos = result.position;
+
+        if (result.found) {
+            if (node.childs.get(pos) == null) {
+                removeFromLeaf(node, pos);
+            } else {
+                removeFromInternal(node, pos);
+            }
+        } else {
+            if (node.childs.get(pos) == null) {
+                System.out.println("Clave " + key + " no encontrada.");
+                return;
+            }
+
+            BNode<E> child = node.childs.get(pos);
+            if (child.count < (orden / 2)) {
+                fill(node, pos);
+            }
+
+            if (pos > node.count) {
+                remove(node.childs.get(pos - 1), key);
+            } else {
+                remove(node.childs.get(pos), key);
+            }
+        }
+    }
+
 }
