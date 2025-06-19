@@ -6,11 +6,15 @@ public class BNode<E extends Comparable<E>> {
     protected ArrayList<E> keys;
     protected ArrayList<BNode<E>> childs;
     protected int count;
+    protected final int idNode;
+    private static int idCounter = 0;
 
     public BNode(int n) {
         this.keys = new ArrayList<E>(n);
         this.childs = new ArrayList<BNode<E>>(n + 1);
         this.count = 0;
+        this.idNode = ++idCounter; 
+
         for (int i = 0; i < n; i++) {
             this.keys.add(null);
             this.childs.add(null);
@@ -53,9 +57,10 @@ public class BNode<E extends Comparable<E>> {
         }
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[");
+        sb.append("Node ID ").append(idNode).append(": [");
         for (int i = 0; i < count; i++) {
             sb.append(keys.get(i));
             if (i < count - 1) sb.append(", ");
