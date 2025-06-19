@@ -440,4 +440,23 @@ public class BTree<E extends Comparable<E>> {
         return expectedLeafDepth == -1 ? depth : expectedLeafDepth;
     }
 
+    public String buscarNombre(int codigo) {
+        return buscarNombreRecursivo(this.root, codigo);
+    }
+
+    private String buscarNombreRecursivo(BNode<E> root2, int codigo) {
+        if (root2 == null) return "No encontrado";
+
+        for (int i = 0; i < root2.count; i++) {
+            RegistroEstudiante estudiante = (RegistroEstudiante) root2.keys.get(i);
+            if (estudiante.getCodigo() == codigo) {
+                return estudiante.getNombre();
+            } else if (codigo < estudiante.getCodigo()) {
+                return buscarNombreRecursivo(root2.childs.get(i), codigo);
+            }
+        }
+        return buscarNombreRecursivo(root2.childs.get(root2.count), codigo);
+    }
+
+
 }
