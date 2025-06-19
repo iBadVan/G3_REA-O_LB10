@@ -392,7 +392,6 @@ public class BTree<E extends Comparable<E>> {
 
                 if (childLevel == parentLevel + 1) {
                     BNode<Integer> child = childEntry.getValue();
-                    // insert child if it fits
                     for (int i = 0; i <= parent.count; i++) {
                         if (parent.childs.get(i) == null) {
                             parent.childs.set(i, child);
@@ -403,7 +402,6 @@ public class BTree<E extends Comparable<E>> {
             }
         }
 
-        // Buscar la raíz (nivel 0)
         for (Map.Entry<Integer, Integer> entry : nodeLevel.entrySet()) {
             if (entry.getValue() == 0) {
                 btree.root = nodeMap.get(entry.getKey());
@@ -418,5 +416,28 @@ public class BTree<E extends Comparable<E>> {
         return btree;
     }
 
+    private boolean validateBTree() {
+        return validateNode(this.root, 0) != -1;
+    }
+
+    private int validateNode(BNode<E> node, int depth) {
+        if (node == null) return depth;
+
+        if (node.count < 1 || node.count >= orden) return -1;
+
+        int expectedLeafDepth = -1;
+        for (int i = 0; i <= node.count; i++) {
+            BNode<E> child = node.childs.get(i);
+            int result = validateNode(child, depth + 1);
+            if (child != null) {
+                if (expectedLeafDepth == -1) {
+                    expectedLeafDepth = result;
+                } else if (expectedLeafDepth != result) {
+                    return -1; 
+                }
+            }
+        }
+        return expectedLeafDepth == -1 ? depth : expectedLeafDepth;
+    }
 
 }
