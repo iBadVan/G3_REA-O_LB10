@@ -73,6 +73,35 @@ public class BTree<E extends Comparable<E>> {
         current.count++;
     }
 
-    
+    private E dividedNode(BNode<E> current, E cl, int k) {
+        BNode<E> rd = nDes;
+        int i, posMdna;
+        E mediana;
+
+        nDes = new BNode<E>(this.orden);
+        posMdna = (k <= this.orden / 2) ? this.orden / 2 : this.orden / 2 + 1;
+
+        for (i = posMdna; i < this.orden - 1; i++) {
+            nDes.keys.set(i - posMdna, current.keys.get(i));
+            nDes.childs.set(i - posMdna + 1, current.childs.get(i + 1));
+        }
+
+        nDes.count = (this.orden - 1) - posMdna;
+        current.count = posMdna;
+
+        if (k <= this.orden / 2) {
+            putNode(current, cl, rd, k);
+        } else {
+            putNode(nDes, cl, rd, k - posMdna);
+        }
+
+        mediana = current.keys.get(current.count - 1);
+        nDes.childs.set(0, current.childs.get(current.count));
+        current.count--;
+
+        up = true;
+        return mediana;
+    }
+
 
 }
