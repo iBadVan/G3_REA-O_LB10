@@ -2,8 +2,6 @@ package btree;
 
 import java.util.ArrayList;
 
-import javax.naming.directory.SearchResult;
-
 public class BNode<E extends Comparable<E>> {
     protected ArrayList<E> keys;
     protected ArrayList<BNode<E>> childs;
@@ -53,6 +51,17 @@ public class BNode<E extends Comparable<E>> {
         public String toString() {
             return found ? "Key found at position " + position : "Key not found, descend to child " + position;
         }
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < count; i++) {
+            sb.append(keys.get(i));
+            if (i < count - 1) sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
 }
