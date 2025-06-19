@@ -115,4 +115,14 @@ public class BTree<E extends Comparable<E>> {
         }
     }
 
+    @Override
+    public String toString() {
+        String s = "";
+        if (isEmpty())
+            s += "BTree is empty...";
+        else
+            s = writeTree(this.root, null);
+        return s;
+    }
+
 }
