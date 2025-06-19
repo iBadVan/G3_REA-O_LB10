@@ -236,5 +236,26 @@ public class BTree<E extends Comparable<E>> {
         node.count--;
     }
 
+    private void removeFromInternal(BNode<E> node, int idx) {
+        E key = node.keys.get(idx);
+        BNode<E> predChild = node.childs.get(idx);
+        BNode<E> succChild = node.childs.get(idx + 1);
+
+        if (predChild.count >= (orden / 2)) {
+            E pred = getPredecessor(predChild);
+            node.keys.set(idx, pred);
+            remove(predChild, pred);
+        } else if (succChild.count >= (orden / 2)) {
+            E succ = getSuccessor(succChild);
+            node.keys.set(idx, succ);
+            remove(succChild, succ);
+        } else {
+            merge(node, idx);
+            remove(predChild, key);
+        }
+    }
+
+    
+
 
 }
