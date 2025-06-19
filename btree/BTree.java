@@ -125,4 +125,46 @@ public class BTree<E extends Comparable<E>> {
         return s;
     }
 
+    private String writeTree(BNode<E> current, BNode<E> parent) {
+        if (current == null) return "";
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Id.Nodo: ").append(current.idNode).append("\n");
+
+        sb.append("Claves Nodo: [");
+        for (int i = 0; i < current.count; i++) {
+            sb.append(current.keys.get(i));
+            if (i < current.count - 1) sb.append(", ");
+        }
+        sb.append("]\n");
+
+        sb.append("Id.Padre: ");
+        sb.append(parent == null ? "--" : "[" + parent.idNode + "]");
+        sb.append("\n");
+
+        sb.append("Id.Hijos: ");
+        boolean hasChildren = false;
+        StringBuilder hijos = new StringBuilder("[");
+        for (int i = 0; i <= current.count; i++) {
+            BNode<E> child = current.childs.get(i);
+            if (child != null) {
+                if (hasChildren) hijos.append(", ");
+                hijos.append(child.idNode);
+                hasChildren = true;
+            }
+        }
+        sb.append(hasChildren ? hijos.append("]") : "--");
+        sb.append("\n\n");
+
+        for (int i = 0; i <= current.count; i++) {
+            BNode<E> child = current.childs.get(i);
+            if (child != null) {
+                sb.append(writeTree(child, current));
+            }
+        }
+
+        return sb.toString();
+    }
+
 }
