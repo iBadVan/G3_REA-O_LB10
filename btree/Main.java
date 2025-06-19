@@ -20,6 +20,7 @@ public class Main {
         System.out.println("¿Está el 52? → Resultado: " + tree.search(52));
         System.out.println("¿Está el 100? → Resultado: " + tree.search(100));
 
+        System.out.println("------------------------LEYENDO ARBOL ------------------------------ ");
         try {
             BTree<Integer> tree2 = BTree.building_Btree("arbolB.txt");
             System.out.println("Árbol B construido correctamente:");
