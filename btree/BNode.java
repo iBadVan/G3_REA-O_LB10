@@ -22,5 +22,8 @@ public class BNode<E extends Comparable<E>> {
         return count == n;
     }
 
+    public boolean nodeEmpty() {
+        return count == 0;
+    }
 
 }
