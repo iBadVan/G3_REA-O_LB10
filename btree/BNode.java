@@ -3,70 +3,69 @@ package btree;
 import java.util.ArrayList;
 
 public class BNode<E extends Comparable<E>> {
-    protected ArrayList<E> keys;
-    protected ArrayList<BNode<E>> childs;
-    protected int count;
-    protected final int idNode;
-    private static int idCounter = 0;
+    protected ArrayList<E> claves;
+    protected ArrayList<BNode<E>> hijos;
+    protected int cantidad;
+    protected final int idNodo;
+    private static int contadorId = 0;
 
     public BNode(int n) {
-        this.keys = new ArrayList<E>(n);
-        this.childs = new ArrayList<BNode<E>>(n + 1);
-        this.count = 0;
-        this.idNode = ++idCounter; 
+        this.claves = new ArrayList<E>(n);
+        this.hijos = new ArrayList<BNode<E>>(n + 1);
+        this.cantidad = 0;
+        this.idNodo = ++contadorId; 
 
         for (int i = 0; i < n; i++) {
-            this.keys.add(null);
-            this.childs.add(null);
+            this.claves.add(null);
+            this.hijos.add(null);
         }
-        this.childs.add(null);
+        this.hijos.add(null);
     }
 
-    public boolean nodeFull(int n) {
-        return count == n;
+    public boolean nodoLleno(int n) {
+        return cantidad == n;
     }
 
-    public boolean nodeEmpty() {
-        return count == 0;
+    public boolean nodoVacio() {
+        return cantidad == 0;
     }
 
-    public SearchResult searchNode(E key) {
+    public ResultadoBusqueda buscarNodo(E clave) {
         int i = 0;
-        while (i < count && key.compareTo(keys.get(i)) > 0) {
+        while (i < cantidad && clave.compareTo(claves.get(i)) > 0) {
             i++;
         }
-        if (i < count && key.compareTo(keys.get(i)) == 0) {
-            return new SearchResult(true, i);
+        if (i < cantidad && clave.compareTo(claves.get(i)) == 0) {
+            return new ResultadoBusqueda(true, i);
         } else {
-            return new SearchResult(false, i); 
+            return new ResultadoBusqueda(false, i); 
         }
     }
 
-    public class SearchResult {
-        public boolean found;
-        public int position;
+    public class ResultadoBusqueda {
+        public boolean encontrado;
+        public int posicion;
 
-        public SearchResult(boolean found, int position) {
-            this.found = found;
-            this.position = position;
+        public ResultadoBusqueda(boolean encontrado, int posicion) {
+            this.encontrado = encontrado;
+            this.posicion = posicion;
         }
 
         @Override
         public String toString() {
-            return found ? "Key found at position " + position : "Key not found, descend to child " + position;
+            return encontrado ? "Clave encontrada en la posición " + posicion : "Clave no encontrada, descender al hijo " + posicion;
         }
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Node ID ").append(idNode).append(": [");
-        for (int i = 0; i < count; i++) {
-            sb.append(keys.get(i));
-            if (i < count - 1) sb.append(", ");
+        sb.append("Nodo ID ").append(idNodo).append(": [");
+        for (int i = 0; i < cantidad; i++) {
+            sb.append(claves.get(i));
+            if (i < cantidad - 1) sb.append(", ");
         }
         sb.append("]");
         return sb.toString();
     }
-
 }
