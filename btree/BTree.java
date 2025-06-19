@@ -170,4 +170,21 @@ public class BTree<E extends Comparable<E>> {
     public boolean search(E cl) {
         return search(this.root, cl);
     }
+
+    private boolean search(BNode<E> node, E cl) {
+        if (node == null) {
+            return false;
+        }
+
+        BNode<E>.SearchResult result = node.searchNode(cl);
+
+        if (result.found) {
+            System.out.println(cl + " se encuentra en el nodo " + node.idNode + " en la posición " + result.position);
+            return true;
+        } else {
+            return search(node.childs.get(result.position), cl);
+        }
+    }
+
+
 }
